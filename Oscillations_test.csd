@@ -103,13 +103,29 @@ springMotion(imassa, irestLen, ipos, ik, idamp)
   endin
 
 
+  instr 6 //doppio pendolo
+
+imassa1 = 1
+imassa2 = 1
+ibraccio1 = .5
+ibraccio2 = .5
+iangle1 = $M_PI/2
+iangle2 = $M_PI/8
+
+doublePendulumMotion(imassa1, imassa2, ibraccio1, ibraccio2, iangle1, iangle2)
+
+  endin
+
+
 </CsInstruments>
 <CsScore>
 
 //i 1 0 3
 //i 2 0 3
 //i 3 0 10
-i 4 0 10
+//i 4 0 10
 //i 5 0 5
+i 6 0 10
+
 </CsScore>
 </CsoundSynthesizer>
