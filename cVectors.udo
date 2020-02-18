@@ -157,22 +157,28 @@ kDrag[] = multScalVector(kDrag, -kmag)
 xout(kDrag)
     endop
 
-    opcode spring, k[], k[]iii ;simulazione forza molla
-kV1[], imassa, irestLen, ik xin
 
-kSpringForce[] = kV1
+     opcode spring, k[], k[]k[]ii ;simulazione forza molla
+kV1[], kO[], irestLen, ik xin
 
-kmagSpring = magnitude(kSpringForce)
-kallungamento = kmagSpring - irestLen
+/*
+kV1[] = vettore posizione massa attaccata alla molla
+kO[] = vettore origini, posizione in cui è attaccata la molla
+*/
 
-kSpringForce[] = normalizeVector(kSpringForce)
-kSpringForce[] = multScalVector(kSpringForce, -ik * kallungamento)
+kSpringForce[] = subVector(kV1, kO) ;direzione della forza
+
+kmagSpring = magnitude(kSpringForce) ;magnitudine per il calcolo dell'allungamento
+kallungamento = kmagSpring - irestLen ;calcolo allungamento
+
+kSpringForce[] = normalizeVector(kSpringForce) ;normalizzazione
+kSpringForce[] = multScalVector(kSpringForce, -ik * kallungamento) ; -k * x
 
 xout(kSpringForce)
     endop
 
 
-    opcode attractor, k[], k[]ik[]i
+    opcode attractor, k[], k[]ik[]i ;attrazione gravitazionale
 kposAttractor[], imassAttractor, kposMover[], imassMover xin
 
 /*
@@ -190,7 +196,7 @@ kforceAttractor[] = normalizeVector(kforceAttractor) //direzione della forza
 
 kc = (iG * imassMover * imassAttractor)/(kdistance^2) //forza
 
-kforceAttractor[] = multScalVector(kforceAttractor, kc) //direzione moltiplicato magnirudine
+kforceAttractor[] = multScalVector(kforceAttractor, kc) //direzione moltiplicato magnitudine
 
 xout(kforceAttractor)
     endop
