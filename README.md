@@ -8,7 +8,7 @@ Part_1: cVectors.udo
 - friction force;
 - drag force;
 - spring force;
-- gravitational attraction;
+- gravitational attraction
 
 Part_2: cOscillations.udo
 
@@ -16,6 +16,7 @@ Part_2: cOscillations.udo
 - MCU and MCUA;
 - pendulum simulation;
 - spring-mass-damping;
+- double pendulum
 
 for any question: mnlpql@gmail.com
 
