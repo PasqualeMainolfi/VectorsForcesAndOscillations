@@ -12,7 +12,7 @@ nchnls = 2
 
 #include "cVectors.udo"
 
-  instr 1
+  instr 1 //friction and drag force application
 
 kPos[] = createVector(0, 0)
 kVel[] = createVector(0, 0)
@@ -32,9 +32,6 @@ ki init 0
 until (ki == iter) do
 
   kPos[] = addVector(kPos, kVel)
-  kAcc[] = diviScalVector(kAcc, imassa)
-  kAcc[] = addVector(kAcc, kForce + kFric + kDrag)
-  kVel[] = addVector(kVel, kAcc)
 
   kFric[] = normalizeVector(kVel)
   kFric[] = multScalVector(kFric, -imu)
@@ -43,6 +40,10 @@ until (ki == iter) do
   kmag = magnitude(kVel)
   kc = (kmag^2) * iCr
   kDrag[] = multScalVector(kDrag, -kc)
+
+  kAcc[] = diviScalVector(kAcc, imassa)
+  kAcc[] = addVector(kAcc, kForce + kFric + kDrag)
+  kVel[] = addVector(kVel, kAcc)
 
   kAcc[] = multScalVector(kAcc, 0)
 
@@ -53,8 +54,49 @@ od
 
   endin
 
+  instr 2 //spring force
 
-  instr 2 //attrazione gravitazionale tra due corpi
+irestLen = .3
+im = 1
+ik = .5
+idamp = .99
+
+kPosition[] = createVector(0, .5)
+kOrigin[] = createVector(0, 0)
+kVel[] = createVector(0, 0)
+kAcc[] = createVector(0, 0)
+kSpringForce[] init 2
+
+kallungamento init 0
+
+ki init 0
+while (ki < 1000) do
+
+  kPosition[] = addVector(kPosition, kVel)
+
+  kSpringForce[] = subVector(kPosition, kOrigin)
+  kmag = magnitude(kSpringForce) ;lunghezza istantanea
+  kallungamento = kmag - irestLen ;calcolo dell'allungamento istantaneo
+
+  kSpringForce[] = normalizeVector(kSpringForce)
+  kSpringForce[] = multScalVector(kSpringForce, -ik * kallungamento)
+
+  kAcc[] = diviScalVector(kAcc, im)
+  kAcc[] = addVector(kAcc, kSpringForce)
+  kVel[] = addVector(kVel, kAcc)
+  kVel[] = multScalVector(kVel, idamp)
+
+    printf("x = %f \ty = %f\n", ki + 1, kPosition[0], kPosition[1])
+
+  kAcc[] = multScalVector(kAcc, 0)
+
+  ki += 1
+od
+
+  endin
+
+
+  instr 3 //attrazione gravitazionale tra due corpi
 
 imassMover = .7 //massa corpo in movimento
 kposMover[] = createVector(.3, .005)
@@ -91,5 +133,7 @@ od
 
 //i 1 0 1
 i 2 0 5
+//i 3 0 5
 </CsScore>
 </CsoundSynthesizer>
+
