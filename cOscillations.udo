@@ -190,3 +190,83 @@ kv *= idamp
 ka *= 0
 
     endop
+
+
+
+/*
+DOPPIO PENDOLO
+
+m1 = massa pendolo 1
+m2 = massa pendolo 2
+r1 = lunghezza braccio pendolo 1
+r2 = lunghezza braccio pendolo 2
+g = 9.81 ---> gravità
+a1 = angolo pendolo 1
+a2 = angolo pendolo 2
+
+posizione pendolo 1;
+x1 = r1 * sin(a1)
+y1 = -r1 * cos(a1)
+
+posizione pendolo 2:
+x2 = x1 + r2 * sin(a2)
+y2 = y1 + r2 * cos(a2)
+
+v1 = 0 ---> derivata prima velocità pendolo 2
+v2 = 0 ---> derivata prima velocità pendolo 2
+
+accNum1 = -g(2m1 + m2)sin(a1) - m2 * g * sin(a1 - 2 * a2) - 2 * sin(a1 - a2) * m2 * (v2^2 * r2 + v1^2 * r1 * cos(a1 - a2))
+accDen1 = r1 * (2 * m1 + m2 - m2 * cos(2 * a1 - 2 * a2))
+acc1 = accNum1/accDen1 ---> derivata seconda accelerazione pendolo 1
+
+accNum2 = 2 * sin(a1 - a2) * (v1^2 * r1 * (m1 + m2) + g * (m1 + m2) * cos(a1) + v2^2 * r2 * m2 * cos(a1 - a2))
+accDen2 = r1 * (2 * m1 + m2 - m2 * cos(2 * a1 - 2 * a2))
+acc2 = accNum2/accDen2 ---> derivata seconda accelerazione pendolo 2
+
+v1 += acc1
+v2 += acc2
+a1 += v1
+a2 += v2
+*/
+
+    opcode doublePendulumMotion, 0, iiiiii
+im1, im2, ir1, ir2, ia1, ia2 xin
+
+ig = 9.81
+
+ka1 init ia1
+ka2 init ia2
+kacc1 init 0
+kacc2 init 0
+
+    kx1 = ir1 * sin(ka1)
+    ky1 = -ir1 * cos(ka1)
+    kx2 = kx1 + ir2 * sin(ka2)
+    ky2 = ky1 - ir2 * cos(ka2)
+
+kv1, kv2 = 0
+
+knum_1a = -ig * (2 * im1 * im2) * sin(ka1)
+knum_1b = -im2 * ig * sin(ka1 - 2 * ka2)
+knum_1c = -2 * sin(ka1 - ka2) * im2
+knum_1d = kv2 * kv2 * ir2 + kv1 * kv1 * ir1 * cos(ka1 - ka2)
+kden_1 = ir1 * (2 * im1 + im2 - im2 * cos(2 * ka1 - 2 * ka2))
+
+knum_2a = 2 * sin(ka1 - ka2)
+knum_2b = kv1 * kv1 * ir1 * (im1 + im2)
+knum_2c = ig * (im1 + im2) * cos(ka1)
+knum_2d = kv2 * kv2 * ir2 * im2 * cos(ka1 - ka2)
+kden_2 = ir2 * (2 * im1 + im2 - im2 * cos(2 * ka1 - 2 * ka2))
+
+kacc1 = (knum_1a + knum_1b + knum_1c * knum_1d)/kden_1
+kacc2 = (knum_2a * (knum_2b + knum_2c + knum_2d))/kden_2
+
+kv1 += kacc1
+kv2 += kacc2
+ka1 += kv1
+ka2 += kv2
+
+    printks("x1 = %f \ty1 = %f \tx2 = %f \ty2 = %f\n", .01, kx1, ky1, kx2, ky2)
+
+    endop
+
