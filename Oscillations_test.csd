@@ -105,14 +105,17 @@ springMotion(imassa, irestLen, ipos, ik, idamp)
 
   instr 6 //doppio pendolo
 
-imassa1 = 1
-imassa2 = 1
+imassa1 = .1
+imassa2 = .1
 ibraccio1 = .5
 ibraccio2 = .5
 iangle1 = $M_PI/2
-iangle2 = $M_PI/8
+iangle2 = $M_PI/2
+ig = 1
+idamp = 1
+kdt = .01
 
-doublePendulumMotion(imassa1, imassa2, ibraccio1, ibraccio2, iangle1, iangle2)
+doublePendulumMotion(imassa1, imassa2, ibraccio1, ibraccio2, iangle1, iangle2, ig, idamp, kdt)
 
   endin
 
