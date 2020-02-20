@@ -177,26 +177,26 @@ kSpringForce[] = multScalVector(kSpringForce, -ik * kallungamento) ; -k * x
 xout(kSpringForce)
     endop
 
-
-    opcode attractor, k[], k[]ik[]i ;attrazione gravitazionale
-kposAttractor[], imassAttractor, kposMover[], imassMover xin
+    opcode attractor, k[], k[]iii ;attrazione gravitazionale
+kforceAttractor[], imassAttractor, imassMover, iG xin
 
 /*
 kposAttractor[] = posizione dell'attrattore
 imassAttractor = massa dell'attrattore
 kposMover[] = vettore posizione mover oggetto in movimento
 imassMover = massa dell'oggetto in movimento
+iG = costante gravitazionale
 */
 
-iG = 6.67 * (10^-11) //costante gravitazionle
-
-kforceAttractor[] = subVector(kposAttractor, kposMover)
 kdistance = magnitude(kforceAttractor) //magnitudine della forza
+kdistance = 1/kdistance
+
 kforceAttractor[] = normalizeVector(kforceAttractor) //direzione della forza
 
 kc = (iG * imassMover * imassAttractor)/(kdistance^2) //forza
-
 kforceAttractor[] = multScalVector(kforceAttractor, kc) //direzione moltiplicato magnitudine
+
+    ;printks("distance = %f\n", .01, kdistance)
 
 xout(kforceAttractor)
     endop
