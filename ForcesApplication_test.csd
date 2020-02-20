@@ -98,25 +98,27 @@ od
 
   instr 3 //attrazione gravitazionale tra due corpi
 
-imassMover = .7 //massa corpo in movimento
-kposMover[] = createVector(.3, .005)
-kvelMover[] = createVector(0, 0)
+iG = .0001 ;6.67 * (10^-11) //costante gravitazionle
+
+imassMover = .3 //massa corpo in movimento
+kposMover[] = createVector(.03, .5)
+kvelMover[] = createVector(iG, 0)
 kaccMover[] = createVector(0, 0)
 
-imassAttractor = 2.1 //massa attrattore
+imassAttractor = 1 //massa attrattore
 kposAttractor[] = createVector(0, 0)
-kforceAttractor[] = kposMover
-
+kforce[] init 2
 
 ki init 1
 while (ki > 0) do
 
-  kforceAttractor[] = attractor(kposAttractor, imassAttractor, kposMover, imassMover)
+  kforce[] = subVector(kposAttractor, kposMover)
+  kforceAttractor[] = attractor(kforce, imassAttractor, imassMover, iG)
 
-  kposMover[] = addVector(kposMover, kvelMover)
   kaccMover[] = diviScalVector(kaccMover, imassMover)
   kaccMover[] = addVector(kaccMover, kforceAttractor)
   kvelMover[] = addVector(kvelMover, kaccMover)
+  kposMover[] = addVector(kposMover, kvelMover)
 
     printf("x = %f \ty = %f\n", ki + 1, kposMover[0], kposMover[1])
 
