@@ -127,7 +127,7 @@ kV1[] xin
 kx = kV1[0]
 ky = kV1[1]
 
-kmag = sqrt(sqrt((kx^2) + (ky^2)))
+kmag = sqrt((kx^2) + (ky^2))
 
 xout(kmag)
     endop
